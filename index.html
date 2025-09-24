@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Riddhi — You Did It! 🎉</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;500;700;900&family=Pacifico&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg1:#071029;--bg2:#0b1b2b;--accent1:#ff7aa2;--accent2:#ffd166;--accent3:#6be7c1;--glass:rgba(255,255,255,0.04)
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:'Poppins',system-ui,Arial;background:radial-gradient(1200px 600px at 10% 10%, rgba(255,122,162,0.06), transparent), linear-gradient(180deg,var(--bg1),var(--bg2));color:#fff}
+
+    .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px;position:relative;overflow:hidden}
+
+    .nebula{position:absolute;inset:-20%;background:conic-gradient(from 120deg at 30% 40%, rgba(255,122,162,0.06), rgba(255,209,102,0.04), rgba(107,231,193,0.03), transparent);filter:blur(60px);transform:rotate(0deg);animation:spin 60s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    .card{width:min(1100px,96%);max-width:1200px;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));border-radius:20px;padding:28px;display:grid;grid-template-columns:1fr 420px;gap:22px;box-shadow:0 20px 60px rgba(2,6,23,0.6);backdrop-filter: blur(6px);border:1px solid rgba(255,255,255,0.04);position:relative;overflow:hidden}
+    @media (max-width:880px){.card{grid-template-columns:1fr;padding:18px}}
+
+    .left{padding:10px}
+    h1{font-family:'Playfair Display',serif;font-size:clamp(30px,5vw,48px);margin:6px 0 10px;line-height:1.02}
+    h1 .name{display:inline-block;background:linear-gradient(90deg,var(--accent1),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent;padding:4px 8px;border-radius:8px}
+    p.lead{opacity:0.92;margin:6px 0 12px;font-size:1.05rem}
+
+    .doctor-badge{position:absolute;left:8px;top:6px;padding:6px 10px;background:linear-gradient(90deg,var(--accent2),var(--accent1));color:#081024;font-weight:900;border-radius:12px;transform-origin:left center;opacity:0;box-shadow:0 12px 30px rgba(255,209,102,0.12);pointer-events:none}
+    .doctor-badge.fly{animation:flyToName 900ms cubic-bezier(.22,.9,.32,1) forwards}
+    @keyframes flyToName{0%{transform:translateY(-40px) scale(0.6);opacity:1}70%{transform:translateY(6px) scale(1.05)}100%{transform:translateY(0) scale(1);opacity:1}}
+
+    .note{margin-top:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:18px;border-radius:12px;border:1px dashed rgba(255,255,255,0.04);font-size:0.98rem}
+    .note .from{margin-top:10px;font-weight:800;color:var(--accent2)}
+    .signature{font-family:'Pacifico',cursive;color:var(--accent1);font-size:1.02rem;margin-top:8px}
+
+    .polaroids{position:relative;height:420px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);display:flex;align-items:center;justify-content:center;overflow:visible}
+    .photo{position:absolute;width:160px;height:200px;background:#fff;border-radius:12px;padding:14px;box-shadow:0 18px 40px rgba(2,6,23,0.5);transform-origin:center center;transition:transform 400ms ease}
+    .photo .label{font-size:0.78rem;color:#081024;font-weight:700;margin-top:8px;text-align:center}
+    .p1{left:12%;top:18%;transform:rotate(-12deg)}
+    .p2{right:10%;top:8%;transform:rotate(8deg);display:flex;flex-direction:column;align-items:center}
+    .p3{left:30%;bottom:10%;transform:rotate(6deg)}
+
+    .label.topper{font-size:0.78rem;color:#081024;font-weight:800;margin-top:8px;text-align:center}
+
+    .stetho{position:absolute;width:120px;height:120px;pointer-events:none;opacity:0;transform:translate(0,-40px) rotate(-18deg)}
+    .stetho.show{animation:stethoOn 1000ms cubic-bezier(.22,.9,.32,1) forwards}
+    @keyframes stethoOn{0%{opacity:0;transform:translate(280px,-120px) rotate(-18deg) scale(0.6)}60%{opacity:1;transform:translate(20px,-20px) rotate(-6deg) scale(1.05)}100%{opacity:1;transform:translate(0,0) rotate(0deg) scale(1)}}
+
+    .balloon{position:absolute;width:84px;height:108px;border-radius:60% 60% 50% 50%;display:flex;align-items:center;justify-content:center;font-weight:800;color:#081024;box-shadow:0 10px 20px rgba(2,6,23,0.4)}
+    .balloon::after{content:"";position:absolute;left:50%;bottom:-26px;width:3px;height:26px;background:rgba(255,255,255,0.15);transform:translateX(-50%)}
+    .balloon.b1{background:linear-gradient(180deg,var(--accent1),#ff9aa2);left:18%;bottom:6%}
+    .balloon.b2{background:linear-gradient(180deg,var(--accent2),#fff1b8);right:18%;bottom:12%}
+    .balloon.b3{background:linear-gradient(180deg,var(--accent3),#b3ffd9);left:52%;top:12%}
+
+    canvas#confetti{position:absolute;inset:0;pointer-events:none}
+
+    .actions{margin-top:18px;display:flex;gap:12px;flex-wrap:wrap}
+    .btn{padding:10px 14px;border-radius:12px;background:transparent;border:1px solid rgba(255,255,255,0.08);color:inherit;text-decoration:none;font-weight:700;cursor:pointer}
+    .btn.primary{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#081024;border:none;box-shadow:0 12px 34px rgba(255, 122, 162, 0.12)}
+
+    .spark{position:absolute;width:8px;height:8px;border-radius:50%;filter:blur(10px);opacity:0.9}
+    .footer-note{position:absolute;left:50%;transform:translateX(-50%);bottom:14px;color:rgba(255,255,255,0.6);font-size:0.86rem}
+
+    
+    .tiny{font-size:0.88rem;opacity:0.9}
+
+    .name-wrap{display:inline-block;padding:6px 12px;border-radius:12px;animation:pulse 3s ease-in-out infinite}
+    @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.03)}100%{transform:scale(1)}}
+
+    .sticky{position:absolute;background:linear-gradient(180deg,#fff2d9,#fff7e6);color:#081024;border-radius:8px;padding:12px;box-shadow:0 10px 30px rgba(2,6,23,0.35);font-size:0.95rem;transform-origin:left top}
+
+  </style>
+</head>
+<body>
+  <div class="wrap" id="wrap">
+    <div class="nebula" aria-hidden></div>
+
+    <div class="card" role="main" aria-labelledby="title">
+      <div class="left">
+        <div style="display:flex;gap:12px;align-items:center">
+          <div style="background:linear-gradient(90deg,var(--accent3),var(--accent1));padding:8px 12px;border-radius:999px;font-weight:800;color:#081024">3rd Round</div>
+          <div class="tiny">Government Medical College — NEET 2025</div>
+        </div>
+
+        <h1 id="title">You did it, <span class="name-wrap"><span class="name" id="nameText">Riddhi Rupasi</span></span>
+          <span class="doctor-badge" id="doctorBadge" aria-hidden>Dr.</span>
+        </h1>
+        <p class="lead">This little corner of the web is a celebration made by me — every animation and surprise is for you. Put your stethoscope on the world and go shine.</p>
+
+        <div class="note">
+          <div style="font-style:italic">I said you earlier that you will definitely get a seat in Round 3 as my research says closing rank will go beyond 30k.</div>
+          <div class="from">— With love, <strong>Adarsh Shandilya</strong></div>
+
+          <div class="actions">
+            <button class="btn primary" id="celebrate">Celebrate 🎊</button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="polaroids" aria-hidden="true">
+        <div class="photo p1" id="p1"><div style="height:84px;background:linear-gradient(180deg,#fff,#eee);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:28px;color:#081024">🎓</div><div class="label">Future Doctor</div></div>
+        <div class="photo p2" id="p2"><div style="height:84px;background:linear-gradient(180deg,#fff,#eee);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:44px;color:#081024">🥼</div><div class="label topper">Topper as Always</div>
+          <svg class="stetho" id="stetho" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+            <g fill="none" stroke="#081024" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 12c6 0 8 6 8 12v18"/>
+              <path d="M18 42c0 6 4 10 10 10s10-4 10-10V26"/>
+              <circle cx="46" cy="46" r="6"/>
+              <path d="M44 44l6 6"/>
+            </g>
+          </svg>
+        </div>
+        <div class="photo p3" id="p3"><div style="height:84px;background:linear-gradient(180deg,#fff,#eee);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:28px;color:#081024">💐</div><div class="label topper">Topper as Always</div></div>
+
+        <div class="balloon b1">R</div>
+        <div class="balloon b2">🎉</div>
+        <div class="balloon b3">🥼</div>
+
+      </div>
+
+      <canvas id="confetti"></canvas>
+
+    </div>
+
+    <div class="footer-note">Made by me — press Celebrate when you're ready to party 🎈</div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('confetti');
+    const ctx = canvas.getContext('2d');
+    let W, H;
+    function resize(){W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight}
+    window.addEventListener('resize', resize); resize();
+
+    function rand(min,max){return Math.random()*(max-min)+min}
+
+    class Piece{constructor(){this.reset()} reset(){this.x=rand(0,W);this.y=rand(-H,0);this.w=rand(6,14);this.h=rand(8,18);this.vx=rand(-0.6,0.6);this.vy=rand(1,3);this.rot=rand(0,360);this.spin=rand(-6,6);this.color=['#ffd166','#ff7aa2','#6be7c1','#a0e7ff'][Math.floor(rand(0,4))]}}
+    let pieces = []
+    for(let i=0;i<160;i++) pieces.push(new Piece())
+
+    let confettiInterval = setInterval(update,16);
+    function update(){ctx.clearRect(0,0,W,H);for(let p of pieces){p.x += p.vx; p.y += p.vy; p.rot += p.spin; if(p.y>H+40){p.reset();p.y=-20} ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot*Math.PI/180); ctx.fillStyle=p.color; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h); ctx.restore()}}
+
+    function burst(x,y,intensity=40){ for(let i=0;i<intensity;i++){let sx = x + rand(-90,90); let sy = y + rand(-90,90); let ps = {x:sx,y:sy,size:rand(6,18),col:['#ffd166','#ff7aa2','#6be7c1','#a0e7ff'][Math.floor(rand(0,4))],life:rand(700,1400)}; let start=Date.now(); (function animate(){ let t=Date.now()-start; if(t>ps.life) return; ctx.save(); ctx.globalAlpha = 1 - (t/ps.life); ctx.beginPath(); ctx.fillStyle=ps.col; ctx.arc(ps.x,ps.y,ps.size*(1 - t/ps.life),0,Math.PI*2); ctx.fill(); ctx.restore(); requestAnimationFrame(animate); })() }}
+
+    const doctorBadge = document.getElementById('doctorBadge');
+    const stetho = document.getElementById('stetho');
+    const nameText = document.getElementById('nameText');
+    let decorated = false;
+
+    function celebrateEffect(){
+      for(let i=0;i<80;i++) pieces.push(new Piece());
+      burst(W/2, H/4, 60); burst(W/3, H/2, 50); burst(2*W/3, H/2, 50);
+
+      doctorBadge.style.opacity = '1'; doctorBadge.classList.add('fly');
+      setTimeout(()=>{
+        doctorBadge.classList.remove('fly'); doctorBadge.style.opacity = '0';
+        if(!decorated){ nameText.textContent = 'Dr. ' + nameText.textContent; decorated = true; }
+      }, 1000);
+
+      stetho.classList.add('show');
+
+      const ring = document.createElement('div'); ring.style.position='absolute'; ring.style.width='180px'; ring.style.height='180px'; ring.style.borderRadius='50%'; ring.style.left='18px'; ring.style.top='6px'; ring.style.pointerEvents='none'; ring.style.boxShadow='0 0 40px 14px rgba(255,200,120,0.12)'; ring.style.opacity='0'; ring.style.transform='scale(0.6)'; document.querySelector('.left').appendChild(ring);
+      ring.animate([{opacity:0, transform:'scale(0.6)'},{opacity:1, transform:'scale(1.05)'},{opacity:0, transform:'scale(1.3)'}], {duration:1200, easing:'cubic-bezier(.22,.9,.32,1)'});
+      setTimeout(()=>ring.remove(),1400);
+
+      ['p1','p2','p3'].forEach((id,i)=>{
+        const el = document.getElementById(id); el.animate([{transform:el.style.transform+' scale(1)'},{transform:el.style.transform+' scale(1.06)'},{transform:el.style.transform+' scale(1)'}],{duration:900 + i*120, easing:'cubic-bezier(.22,.9,.32,1)'});
+      });
+
+      const rect = nameText.getBoundingClientRect();
+      for(let i=0;i<12;i++){ setTimeout(()=>burst(rect.left + rect.width/2 + rand(-40,40), rect.top + rand(-20,40), 6), i*60) }
+
+      setTimeout(()=>{ if(pieces.length>200) pieces = pieces.slice(0,160); },4000);
+    }
+
+    document.getElementById('celebrate').addEventListener('click', ()=>{
+      celebrateEffect();
+    });
+
+    const wrap = document.getElementById('wrap');
+    wrap.addEventListener('mousemove', (e)=>{
+      const cx = window.innerWidth/2, cy = window.innerHeight/2; const dx = (e.clientX - cx)/cx; const dy = (e.clientY - cy)/cy;
+      document.getElementById('p1').style.transform = `translate(${dx*12}px,${dy*10}px) rotate(-12deg)`;
+      document.getElementById('p2').style.transform = `translate(${dx*-10}px,${dy*6}px) rotate(8deg)`;
+      document.getElementById('p3').style.transform = `translate(${dx*6}px,${dy*-8}px) rotate(6deg)`;
+    })
+
+    let clickCount = 0; let clickTimer;
+    nameText.addEventListener('click', ()=>{
+      clickCount++;
+      clearTimeout(clickTimer);
+      clickTimer = setTimeout(()=>{ clickCount = 0 },800);
+      if(clickCount===3){
+        clickCount = 0;
+        const s = document.createElement('div'); s.className='sticky'; s.textContent = "Tiny secret — told you I had a feeling. Can't wait to celebrate properly! ~ me";
+        const r = nameText.getBoundingClientRect(); s.style.left = (r.left + 10) + 'px'; s.style.top = (r.bottom + 8) + 'px'; document.body.appendChild(s);
+        s.animate([{opacity:0, transform:'translateY(-6px)'},{opacity:1, transform:'translateY(0)'},{opacity:1, transform:'translateY(0)'},{opacity:0, transform:'translateY(-6px)'}],{duration:3600,easing:'cubic-bezier(.22,.9,.32,1)'});
+        setTimeout(()=>s.remove(),3600);
+      }
+    });
+
+    
+
+  </script>
+</body>
+</html>
