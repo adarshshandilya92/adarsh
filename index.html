@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Riddhi — You Did It! 🎉</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;500;700;900&family=Pacifico&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg1:#071029;--bg2:#0b1b2b;--accent1:#ff7aa2;--accent2:#ffd166;--accent3:#6be7c1;--glass:rgba(255,255,255,0.04)
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:'Poppins',system-ui,Arial;background:radial-gradient(1200px 600px at 10% 10%, rgba(255,122,162,0.06), transparent), linear-gradient(180deg,var(--bg1),var(--bg2));color:#fff}
+
+    .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;overflow:hidden}
+
+    .nebula{position:absolute;inset:-20%;background:conic-gradient(from 120deg at 30% 40%, rgba(255,122,162,0.06), rgba(255,209,102,0.04), rgba(107,231,193,0.03), transparent);filter:blur(60px);transform:rotate(0deg);animation:spin 60s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    .card{width:100%;max-width:1200px;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));border-radius:20px;padding:20px;display:grid;grid-template-columns:1fr 420px;gap:22px;box-shadow:0 20px 60px rgba(2,6,23,0.6);backdrop-filter: blur(6px);border:1px solid rgba(255,255,255,0.04);position:relative;overflow:hidden}
+    @media (max-width:880px){
+      .card{grid-template-columns:1fr;padding:18px}
+      .polaroids{height:auto;flex-wrap:wrap;gap:14px;padding:10px}
+      .photo{position:relative !important;transform:none !important;flex:1 1 100px;max-width:140px;height:180px}
+    }
+
+    .left{padding:10px}
+    h1{font-family:'Playfair Display',serif;font-size:clamp(26px,6vw,48px);margin:6px 0 10px;line-height:1.1}
+    h1 .name{display:inline-block;background:linear-gradient(90deg,var(--accent1),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent;padding:4px 8px;border-radius:8px}
+    p.lead{opacity:0.92;margin:6px 0 12px;font-size:1rem}
+
+    .doctor-badge{position:absolute;left:8px;top:6px;padding:6px 10px;background:linear-gradient(90deg,var(--accent2),var(--accent1));color:#081024;font-weight:900;border-radius:12px;transform-origin:left center;opacity:0;box-shadow:0 12px 30px rgba(255,209,102,0.12);pointer-events:none}
+
+    .note{margin-top:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:18px;border-radius:12px;border:1px dashed rgba(255,255,255,0.04);font-size:0.95rem}
+    .note .from{margin-top:10px;font-weight:800;color:var(--accent2)}
+
+    .polaroids{position:relative;height:420px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);display:flex;align-items:center;justify-content:center;overflow:visible}
+    .photo{position:absolute;width:160px;height:200px;background:#fff;border-radius:12px;padding:14px;box-shadow:0 18px 40px rgba(2,6,23,0.5);transform-origin:center center;transition:transform 400ms ease}
+    .photo .label{font-size:0.78rem;color:#081024;font-weight:700;margin-top:8px;text-align:center}
+    .p1{left:12%;top:18%;transform:rotate(-12deg)}
+    .p2{right:10%;top:8%;transform:rotate(8deg)}
+    .p3{left:30%;bottom:10%;transform:rotate(6deg)}
+
+    .emoji-popup{
+      position:absolute;
+      left:50%;
+      top:50%;
+      transform:translate(-50%, 0);
+      font-size:26px;
+      will-change:transform,opacity;
+      pointer-events:none;
+      animation:floatUpFade 1400ms cubic-bezier(.2,.9,.25,1) forwards;
+      text-shadow:0 6px 18px rgba(2,6,23,0.45);
+    }
+    @keyframes floatUpFade{
+      0%{opacity:1; transform:translate(-50%, 0) scale(0.9)}
+      20%{transform:translate(calc(-50% + var(--x)), calc(var(--y))) scale(1.08)}
+      100%{opacity:0; transform:translate(calc(-50% + var(--x)), calc(var(--y) - 140px)) scale(0.8)}
+    }
+
+    .stetho-inline{
+      display:inline-block;
+      margin-left:8px;
+      font-size:20px;
+      vertical-align:middle;
+      transform-origin:center center;
+      animation:popIn 700ms cubic-bezier(.22,.9,.32,1);
+      opacity:0;
+    }
+    @keyframes popIn{
+      0%{transform:scale(0.2) rotate(-20deg); opacity:0}
+      60%{transform:scale(1.1) rotate(8deg); opacity:1}
+      100%{transform:scale(1) rotate(0deg); opacity:1}
+    }
+
+    .celebrate-toast{
+      position:fixed;
+      left:50%;
+      top:18px;
+      transform:translateX(-50%);
+      background:linear-gradient(90deg,var(--accent1),var(--accent2));
+      color:#081024;
+      padding:10px 16px;
+      border-radius:12px;
+      font-weight:800;
+      box-shadow:0 8px 32px rgba(2,6,23,0.6);
+      pointer-events:none;
+      opacity:0;
+      animation:toastInOut 2000ms ease forwards;
+      z-index:9999;
+    }
+    @keyframes toastInOut{
+      0%{opacity:0; transform:translate(-50%, -6px) scale(0.96)}
+      10%{opacity:1; transform:translate(-50%, 0) scale(1)}
+      80%{opacity:1; transform:translate(-50%, 0) scale(1)}
+      100%{opacity:0; transform:translate(-50%, -8px) scale(0.96)}
+    }
+
+    .polaroids.pulse .photo{animation:popPulse 880ms cubic-bezier(.22,.9,.32,1)}
+    @keyframes popPulse{
+      0%{transform:scale(1)}
+      40%{transform:scale(1.06)}
+      100%{transform:scale(1)}
+    }
+
+    canvas#confetti{position:absolute;inset:0;pointer-events:none}
+    .actions{margin-top:18px;display:flex;gap:12px;flex-wrap:wrap}
+    .btn.primary{padding:10px 14px;border-radius:12px;background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#081024;border:none;box-shadow:0 12px 34px rgba(255, 122, 162, 0.12);font-weight:700;cursor:pointer}
+
+    .footer-note{position:absolute;left:50%;transform:translateX(-50%);bottom:14px;color:rgba(255,255,255,0.6);font-size:0.86rem;text-align:center}
+  </style>
+</head>
+<body>
+  <div class="wrap" id="wrap">
+    <div class="nebula" aria-hidden></div>
+
+    <div class="card" role="main" aria-labelledby="title">
+      <div class="left">
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+          <div style="background:linear-gradient(90deg,var(--accent3),var(--accent1));padding:6px 12px;border-radius:999px;font-weight:800;color:#081024">3rd Round</div>
+          <div class="tiny">Government Medical College — NEET 2025</div>
+        </div>
+
+        <h1 id="title">You did it, <span class="name-wrap"><span class="name" id="nameText">Riddhi Rupasi</span></span>
+          <span class="doctor-badge" id="doctorBadge" aria-hidden>Dr.</span>
+        </h1>
+        <p class="lead">This little corner of the web is a celebration made by me — every animation and surprise is for you. Put your stethoscope on the world and go shine.</p>
+
+        <div class="note">
+          <div style="font-style:italic">I said you earlier that you will definitely get a seat in Round 3 as my research says closing rank will go beyond 30k.</div>
+          <div class="from">— With love, <strong>Adarsh Shandilya</strong></div>
+          <div class="actions">
+            <button class="btn primary" id="celebrate">Click here to celebrate 🎊</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="polaroids" id="polaroids" aria-hidden="true">
+        <div class="photo p1" id="p1">
+          <div style="height:84px;background:#eee;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:28px;color:#081024">🎓</div>
+          <div class="label">Future Doctor</div>
+        </div>
+        <div class="photo p2" id="p2">
+          <div style="height:84px;background:#eee;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:44px;color:#081024">🥼</div>
+          <div class="label">Topper as Always</div>
+        </div>
+        <div class="photo p3" id="p3">
+          <div style="height:84px;background:#eee;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:32px;color:#081024">🍕</div>
+          <div class="label">Treat when??</div>
+        </div>
+      </div>
+
+      <canvas id="confetti"></canvas>
+    </div>
+    <div class="footer-note">Made by me — press Celebrate when you're ready to party 🎈</div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('confetti');
+    const ctx = canvas.getContext('2d');
+    let W, H;
+    function resize(){W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight}
+    window.addEventListener('resize', resize); resize();
+
+    function rand(min,max){return Math.random()*(max-min)+min}
+    class Piece{constructor(){this.reset()} reset(){this.x=rand(0,W);this.y=rand(-H,0);this.w=rand(6,14);this.h=rand(8,18);this.vx=rand(-0.6,0.6);this.vy=rand(1,3);this.rot=rand(0,360);this.spin=rand(-6,6);this.color=['#ffd166','#ff7aa2','#6be7c1','#a0e7ff'][Math.floor(rand(0,4))]}}
+    let pieces = [];for(let i=0;i<160;i++) pieces.push(new Piece())
+    let confettiInterval = setInterval(()=>{ctx.clearRect(0,0,W,H);for(let p of pieces){p.x+=p.vx;p.y+=p.vy;p.rot+=p.spin;if(p.y>H+40){p.reset();p.y=-20}ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot*Math.PI/180);ctx.fillStyle=p.color;ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);ctx.restore()}},16);
+
+    const celebrateBtn = document.getElementById('celebrate');
+    const nameText = document.getElementById('nameText');
+    const polaroids = document.getElementById('polaroids');
+    let stethoAdded = false;
+    let decorated = false;
+
+    function createEmojiPopup(emoji, offsetX = 0, offsetY = 0, delay = 0){
+      const popup = document.createElement('div');
+      popup.className = 'emoji-popup';
+      popup.textContent = emoji;
+      const rx = Math.round((Math.random()*160 - 80) + offsetX) + 'px';
+      const ry = Math.round((Math.random()*40 + offsetY)) + 'px';
+      popup.style.setProperty('--x', rx);
+      popup.style.setProperty('--y', ry);
+      popup.style.animationDelay = `${delay}ms`;
+      document.body.appendChild(popup);
+      setTimeout(()=> popup.remove(), 1600 + delay);
+    }
+
+    function showToast(text){
+      const t = document.createElement('div');
+      t.className = 'celebrate-toast';
+      t.textContent = text;
+      document.body.appendChild(t);
+      setTimeout(()=> t.remove(), 2100);
+    }
+
+    function addInlineStetho(){
+      if(stethoAdded) return;
+      const s = document.createElement('span');
+      s.className = 'stetho-inline';
+      s.textContent = '🩺';
+      nameText.insertAdjacentElement('afterend', s);
+      stethoAdded = true;
+    }
+
+    function shortPolaroidPulse(){
+      polaroids.classList.add('pulse');
+      setTimeout(()=> polaroids.classList.remove('pulse'), 900);
+    }
+
+    function miniCardBursts(){
+      const emojis = ['🎉','🩺','🌟','🎊','🍕','✨'];
+      for(let i=0;i<16;i++){
+        const e = emojis[Math.floor(Math.random()*emojis.length)];
+        createEmojiPopup(e, 0, -20 - Math.random()*20, i * 60);
+      }
+    }
+
+    function celebrateEffectFull(){
+      for(let i=0;i<80;i++) pieces.push(new Piece());
+
+      const nameRect = nameText.getBoundingClientRect();
+      for(let i=0;i<10;i++){
+        const emojis = ['🩺','🎉','🌟','🎊'];
+        const emoji = emojis[Math.floor(Math.random()*emojis.length)];
+        const px = nameRect.left + nameRect.width/2 + (Math.random()*140 - 70);
+        const py = nameRect.top + (Math.random()*40 - 10);
+        const dom = document.createElement('div');
+        dom.className = 'emoji-popup';
+        dom.textContent = emoji;
+        dom.style.left = px + 'px';
+        dom.style.top = py + 'px';
+        dom.style.transform = 'translate(-50%, 0)';
+        dom.style.setProperty('--x', (Math.random()*60 - 30) + 'px');
+        dom.style.setProperty('--y', (Math.random()*6 - 10) + 'px');
+        dom.style.animationDelay = `${i*40}ms`;
+        document.body.appendChild(dom);
+        setTimeout(()=> dom.remove(), 1600 + i*40);
+      }
+
+      addInlineStetho();
+      showToast("Time to celebrate — congrats, Dr. Riddhi! 🎉");
+      shortPolaroidPulse();
+      miniCardBursts();
+      setTimeout(()=>{ if(pieces.length>220) pieces = pieces.slice(0,160); }, 4000);
+    }
+
+    celebrateBtn.addEventListener('click', ()=>{
+      if(!decorated){
+        nameText.textContent = 'Dr. ' + nameText.textContent;
+        decorated = true;
+      }
+      celebrateEffectFull();
+    });
+
+    let clickCount = 0; let clickTimer;
+    nameText.addEventListener('click', ()=>{
+      clickCount++;
+      clearTimeout(clickTimer);
+      clickTimer = setTimeout(()=>{ clickCount = 0 },800);
+      if(clickCount===3){
+        clickCount = 0;
+        const s = document.createElement('div'); 
+        s.className='celebrate-toast'; 
+        s.textContent = "Tiny secret — told you I had a feeling. Can't wait to celebrate properly! ~ me";
+        s.style.top = '80px';
+        document.body.appendChild(s);
+        setTimeout(()=> s.remove(), 2000);
+      }
+    });
+
+    const wrap = document.getElementById('wrap');
+    wrap.addEventListener('mousemove', (e)=>{
+      const cx = window.innerWidth/2, cy = window.innerHeight/2; 
+      const dx = (e.clientX - cx)/cx; 
+      const dy = (e.clientY - cy)/cy;
+      const p1 = document.getElementById('p1'), p2 = document.getElementById('p2'), p3 = document.getElementById('p3');
+      if(p1 && p2 && p3){
+        p1.style.transform = `translate(${dx*10}px, ${dy*8}px) rotate(-12deg)`;
+        p2.style.transform = `translate(${dx*-8}px, ${dy*6}px) rotate(8deg)`;
+        p3.style.transform = `translate(${dx*6}px, ${dy*-6}px) rotate(6deg)`;
+      }
+    });
+  </script>
+</body>
+</html>
